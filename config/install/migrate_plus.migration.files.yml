@@ -9,8 +9,8 @@ source:
   plugin: url
   # In this example we get data from a local file, to get data from a URL
   # define http as data_fetcher_plugin.
-  # data_fetcher_plugin: http
-  data_fetcher_plugin: file
+  data_fetcher_plugin: http
+  # data_fetcher_plugin: file
   data_parser_plugin: json
   # The data_parser normally limits the fields passed on to the source plugin
   # to fields configured to be used as part of the migration. To support more
@@ -24,7 +24,7 @@ source:
   # track_changes: true
   # Copy the example JSON file in artifacts folder to sites/default/files folder.
   urls:
-  - 'public://migrate_json_example/pages.json'
+    - 'http://latrobe.dvm.local/sites/default/files/import.json'
   # An xpath-like selector corresponding to the items to be imported.
   item_selector: documents
   fields:
@@ -35,6 +35,10 @@ source:
     name: url
     label: 'File path'
     selector: url
+  -
+    name: alias
+    label: 'Unique Alias'
+    selector: alias
 
   # Under 'ids', we identify source fields populated above which will uniquely
   # identify each imported item. The 'type' makes sure the migration map table
@@ -58,6 +62,8 @@ process:
     plugin: file_import
     source: url
     destination_dir: 'public://'
+    reuse: true
+  path/alias: alias
 
 destination:
   plugin: entity:media

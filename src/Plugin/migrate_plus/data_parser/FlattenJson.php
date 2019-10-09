@@ -2,7 +2,6 @@
 
 namespace Drupal\content_crawler_migration\Plugin\migrate_plus\data_parser;
 
-
 use Drupal\migrate_plus\Plugin\migrate_plus\data_parser\Json;
 
 /**

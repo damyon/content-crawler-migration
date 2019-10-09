@@ -1,16 +1,16 @@
 # This migration demonstrates a simple import from a JSON file.
-id: pages
+id: menu_link_main
 label: Menu Import
 migration_group: json_import
 migration_tags:
   - json example
 source:
   plugin: url
-  # data_fetcher_plugin: http
-  data_fetcher_plugin: file
+  data_fetcher_plugin: http
+  # data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - 'public://migrate_json_example/pages.json'
+    - 'http://latrobe.dvm.local/sites/default/files/import.json'
   item_selector: pages
   fields:
     - name: url
@@ -21,11 +21,15 @@ source:
       label: 'Unique Alias'
       selector: alias
     -
+      name: parent
+      label: 'Parent Menu Item'
+      selector: parent
+    -
       name: title
       label: 'Menu link text'
       selector: title
   ids:
-    url:
+    alias:
       type: string
 process:
   bundle:
@@ -39,6 +43,12 @@ process:
     plugin: link_uri
     source:
       - alias
+  parent:
+    plugin: menu_link_parent
+    source:
+      - parent
+      - menu_name
+      - parent
 destination:
   plugin: entity:menu_link_content
 migration_dependencies:

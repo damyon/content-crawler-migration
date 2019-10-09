@@ -9,8 +9,8 @@ source:
   plugin: url
   # In this example we get data from a local file, to get data from a URL
   # define http as data_fetcher_plugin.
-  # data_fetcher_plugin: http
-  data_fetcher_plugin: file
+  data_fetcher_plugin: http
+  # data_fetcher_plugin: file
   data_parser_plugin: json
   # The data_parser normally limits the fields passed on to the source plugin
   # to fields configured to be used as part of the migration. To support more
@@ -24,7 +24,7 @@ source:
   # track_changes: true
   # Copy the example JSON file in artifacts folder to sites/default/files folder.
   urls:
-    - 'public://migrate_json_example/pages.json'
+    - 'http://latrobe.dvm.local/sites/default/files/import.json'
   # An xpath-like selector corresponding to the items to be imported.
   item_selector: pages
   # Under 'fields', we list the data items to be imported. The first level keys
@@ -61,7 +61,7 @@ process:
   # defined by the 'fields' configuration for the source plugin above.
   type:
     plugin: default_value
-    default_value: govcms_standard_page
+    default_value: page
   id: url
   title: title
   body/value:
@@ -69,7 +69,7 @@ process:
     source: body
   body/format:
     plugin: default_value
-    default_value: rich_text
+    default_value: full_html
   sticky:
     plugin: default_value
     default_value: 0
@@ -85,6 +85,5 @@ process:
   path/alias: alias
 destination:
   plugin: 'entity:node'
-  default_bundle: govcms_standard_page
+  default_bundle: page
 migration_dependencies: {  }
-
