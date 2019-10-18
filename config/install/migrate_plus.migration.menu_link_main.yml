@@ -1,4 +1,4 @@
-# This migration demonstrates a simple import from a JSON file.
+# This migration is a simple import from a JSON file.
 id: menu_link_main
 label: Menu Import
 migration_group: json_import
@@ -6,11 +6,16 @@ migration_tags:
   - json example
 source:
   plugin: url
-  data_fetcher_plugin: http
-  # data_fetcher_plugin: file
+  data_fetcher_plugin: file
   data_parser_plugin: json
+  # Possible options
+  #   include_raw_data: true
+  #   track_changes: true
+  #
+  # Copy the source.json file config/import/source.json folder.
   urls:
-    - 'http://latrobe.dvm.local/sites/default/files/import.json'
+    - '../config/import/source.json'
+  # An xpath-like selector corresponding to the items to be imported.
   item_selector: pages
   fields:
     - name: url
@@ -35,7 +40,10 @@ process:
   bundle:
     plugin: default_value
     default_value: menu_link_content
-  title: title
+  title/value: title
+  title/format:
+    plugin: default_value
+    default_value: full_html
   menu_name:
     plugin: default_value
     default_value: main

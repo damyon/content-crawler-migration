@@ -1,0 +1,41 @@
+# This migration demonstrates a simple import from a JSON file.
+id: redirects
+label: Redirect Import
+migration_group: json_import
+migration_tags:
+  - json example
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  # Possible options
+  #   include_raw_data: true
+  #   track_changes: true
+  #
+  # Copy the source.json file config/import/source.json folder.
+  urls:
+    - '../config/import/source.json'
+  # An xpath-like selector corresponding to the items to be imported.
+  item_selector: redirects
+  fields:
+    - name: source
+      label: 'Source URL'
+      selector: source
+    -
+      name: target
+      label: 'Target URL'
+      selector: target
+  ids:
+    source:
+      type: string
+process:
+  status_code:
+    plugin: default_value
+    default_value: 301
+  redirect_source/path: source
+  redirect_redirect/uri: target
+destination:
+  plugin: 'entity:redirect'
+migration_dependencies:
+  required:
+    - 'pages'

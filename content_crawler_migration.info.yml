@@ -18,4 +18,5 @@ config_devel:
   - migrate_plus.migration.images
   - migrate_plus.migration.files
   - migrate_plus.migration.menu_link_main
+  # - migrate_plus.migration.redirects
   - migrate_plus.migration_group.json_import

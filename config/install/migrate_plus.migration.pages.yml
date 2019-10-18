@@ -5,34 +5,18 @@ migration_group: json_import
 migration_tags:
   - json example
 source:
-  # We use the JSON source plugin.
   plugin: url
-  # In this example we get data from a local file, to get data from a URL
-  # define http as data_fetcher_plugin.
-  data_fetcher_plugin: http
-  # data_fetcher_plugin: file
+  data_fetcher_plugin: file
   data_parser_plugin: json
-  # The data_parser normally limits the fields passed on to the source plugin
-  # to fields configured to be used as part of the migration. To support more
-  # dynamic migrations, the JSON data parser supports including the original
-  # data for the current row. Simply include the 'include_raw_data' flag set
-  # to `true` to enable this. This option is disabled by default to minimize
-  # memory footprint for migrations that do not need this capability.
-  # include_raw_data: true
-  # Flags whether to track changes to incoming data. If TRUE, we will maintain
-  # hashed source rows to determine whether incoming data has changed.
-  # track_changes: true
-  # Copy the example JSON file in artifacts folder to sites/default/files folder.
+  # Possible options
+  #   include_raw_data: true
+  #   track_changes: true
+  #
+  # Copy the source.json file config/import/source.json folder.
   urls:
-    - 'http://latrobe.dvm.local/sites/default/files/import.json'
+    - '../config/import/source.json'
   # An xpath-like selector corresponding to the items to be imported.
   item_selector: pages
-  # Under 'fields', we list the data items to be imported. The first level keys
-  # are the source field names we want to populate (the names to be used as
-  # sources in the process configuration below). For each field we're importing,
-  # we provide a label (optional - this is for display in migration tools) and
-  # an xpath for retrieving that value. It's important to note that this xpath
-  # is relative to the elements retrieved by item_selector.
   fields:
     - name: url
       label: 'Unique ID'
@@ -49,6 +33,23 @@ source:
       name: body
       label: 'Page body'
       selector: body
+    -
+      name: type
+      label: 'Page type identifier'
+      selector: contentType
+    -
+      # Expected format: Y-m-d\TH:i:s
+      name: field_date
+      label: 'Start date'
+      selector: field_date
+    -
+      name: field_date_end
+      label: 'End date'
+      selector: field_date_end
+    -
+      name: field_location
+      label: 'Location field'
+      selector: field_location
 
   # Under 'ids', we identify source fields populated above which will uniquely
   # identify each imported item. The 'type' makes sure the migration map table
@@ -57,19 +58,24 @@ source:
     url:
       type: string
 process:
-  # Note that the source field names here (name, description and price) were
-  # defined by the 'fields' configuration for the source plugin above.
-  type:
-    plugin: default_value
-    default_value: page
+  type: type
   id: url
-  title: title
+  title/value: title
+  title/format:
+    plugin: default_value
+    default_value: rich_text
+  title/view_mode:
+    plugin: default_value
+    default_value: 'node.full'
+  body/view_mode:
+    plugin: default_value
+    default_value: 'node.full'
   body/value:
     plugin: body_parser
     source: body
   body/format:
     plugin: default_value
-    default_value: full_html
+    default_value: rich_text 
   sticky:
     plugin: default_value
     default_value: 0
@@ -83,6 +89,12 @@ process:
     plugin: default_value
     default_value: 0
   path/alias: alias
+  field_event_date/value: field_date
+  field_event_date/end_value: field_date_end
+  field_location/value: field_location
+  field_location/format:
+    plugin: default_value
+    default_value: rich_text
 destination:
   plugin: 'entity:node'
   default_bundle: page
