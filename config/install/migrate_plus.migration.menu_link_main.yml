@@ -61,4 +61,4 @@ destination:
   plugin: entity:menu_link_content
 migration_dependencies:
   required:
-    - pages
+    - 'pages'

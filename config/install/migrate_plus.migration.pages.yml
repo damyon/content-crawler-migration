@@ -37,19 +37,53 @@ source:
       name: type
       label: 'Page type identifier'
       selector: contentType
+
+      # govcms_blog_article
+    -
+      name: field_blog_article_categories
+      label: 'Blog article categories'
+      selector: field_blog_article_categories
+
+      # govcms_event
+    -
+      name: field_event_categories
+      label: 'Event categories'
+      selector: field_event_categories
     -
       # Expected format: Y-m-d\TH:i:s
-      name: field_date
+      name: field_event_date
       label: 'Start date'
-      selector: field_date
+      selector: field_event_date
     -
-      name: field_date_end
+      # Expected format: Y-m-d\TH:i:s
+      name: field_event_date_end
       label: 'End date'
-      selector: field_date_end
+      selector: field_event_date_end
     -
-      name: field_location
+      name: field_event_location
       label: 'Location field'
-      selector: field_location
+      selector: field_event_location
+
+      # govcms_foi
+    -
+      # Expected format: Y-m-d\TH:i:s
+      name: field_foi_date_listed
+      label: 'FOI date listed'
+      selector: field_foi_date_listed
+    -
+      # Expected format: Y-m-d\TH:i:s
+      name: field_foi_proposed_deletion_date
+      label: 'Proposed deletion date'
+      selector: field_foi_proposed_deletion_date
+
+      # govcms_news_and_media
+    -
+      name: field_news_categories
+      label: 'News categories'
+      selector: field_news_categories
+      
+      # govcms_standard_page
+      # (none)
 
   # Under 'ids', we identify source fields populated above which will uniquely
   # identify each imported item. The 'type' makes sure the migration map table
@@ -89,13 +123,36 @@ process:
     plugin: default_value
     default_value: 0
   path/alias: alias
-  field_event_date/value: field_date
-  field_event_date/end_value: field_date_end
-  field_location/value: field_location
-  field_location/format:
+  # govcms_blog_article
+  field_blog_article_categories:
+    plugin: migration_lookup
+    source: field_blog_article_categories
+    migration: blog_article_category
+    no_stub: true
+  # govcms_event
+  field_event_categories:
+    plugin: migration_lookup
+    source: field_event_categories
+    migration: event_category
+    no_stub: true
+  field_event_date/value: field_event_date
+  field_event_date/end_value: field_event_date_end
+  field_event_location/value: field_event_location
+  field_event_location/format:
     plugin: default_value
     default_value: rich_text
+  # govcms_foi
+  field_foi_date_listed/value: field_foi_date_listed
+  field_foi_proposed_deletion_date/value: field_foi_proposed_deletion_date
+  # govcms_news_and_media
+  field_news_categories:
+    plugin: migration_lookup
+    source: field_news_categories
+    migration: news_category
+    no_stub: true
 destination:
   plugin: 'entity:node'
   default_bundle: page
-migration_dependencies: {  }
+migration_dependencies:
+  required:
+    - 'migrate_plus.migration.blog_article_category'

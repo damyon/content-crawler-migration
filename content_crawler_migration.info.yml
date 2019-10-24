@@ -14,9 +14,12 @@ dependencies:
 # To re-import below migrations/configs run `drush cdi content_crawler_migration`
 config_devel:
   install:
+  - migrate_plus.migration.blog_article_category
+  - migrate_plus.migration.event_category
+  - migrate_plus.migration.news_category
   - migrate_plus.migration.pages
   - migrate_plus.migration.images
   - migrate_plus.migration.files
   - migrate_plus.migration.menu_link_main
-  # - migrate_plus.migration.redirects
+  - migrate_plus.migration.redirects
   - migrate_plus.migration_group.json_import

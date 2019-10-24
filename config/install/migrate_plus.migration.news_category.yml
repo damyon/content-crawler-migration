@@ -1,0 +1,38 @@
+# This migration is a simple import from a JSON file.
+id: news_category
+label: News Category Import
+migration_group: json_import
+migration_tags:
+  - json example
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  # Possible options
+  #   include_raw_data: true
+  #   track_changes: true
+  #
+  # Copy the source.json file config/import/source.json folder.
+  urls:
+    - '../config/import/source.json'
+  # An xpath-like selector corresponding to the items to be imported.
+  item_selector: pages
+  fields:
+    - name: category
+      label: 'News Category'
+      selector: field_news_categories
+  ids:
+    category:
+      type: string
+process:
+  name:
+    plugin: default_value
+    default_value: 'All'
+    source: category
+  parent:
+    plugin: default_value
+    default_value: 0
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: news_categories
+migration_dependencies: {  }
